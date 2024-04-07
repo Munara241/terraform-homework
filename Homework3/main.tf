@@ -5,6 +5,11 @@ provider "aws" {
   region = "us-west-2"
 }
 
+# Specify 3 availability zones from the region
+variable "availability_zones" {
+  default = ["us-west-2a", "us-west-2b", "us-west-2c",]
+}
+
 # the latest Amazon Linux 2 AMI for the instance.
 data "aws_ami" "amzn2" {
   most_recent = true   
@@ -26,8 +31,7 @@ resource "aws_instance" "web" {
   ami           = data.aws_ami.amzn2.id
   instance_type = "t2.micro"      # Instances type t2.micro.
   count         = length(var.availability_zones) # EC2 instances created in each AZ.
-  # all_availability_zones = true
-  subnet_id     = aws_subnet.my_subnet[count.index].id   # Added from subnets.tf file
+  availability_zone = var.availability_zones[count.index]
   vpc_security_group_ids = [aws_security_group.allow_tls.id]
   associate_public_ip_address = true 
   key_name = aws_key_pair.linux.key_name  # Add Bastion key to the Instances.
