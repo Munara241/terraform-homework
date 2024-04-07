@@ -1,13 +1,53 @@
-# Description
 
 # Create Homework3 folder and perform following:
 # Provision 3 EC2 instances with one resource block in the us-west-2 region.
-# Instances type should be t2.micro.
-# Use the latest Amazon Linux 2 AMI for the instance.
-# Create security group with inbounds ports 22, 80, 443 and 3306 open and attach to the Instances.
-# Add Bastion key to the Instances.
-# Ensure EC2 instances are accessible over the internet. Assign a public IP address.
-# Ensure EC2 instances created in each AZ.
-# Ensure instances names are: web-1, web-2, web-2.
-# Automatically install Apache web server and create a simple webpage that returns "Hello, World!" when visited.
-# Provide GitHub URL in the comment below.
+provider "aws" {
+  region = "us-west-2"
+}
+
+# the latest Amazon Linux 2 AMI for the instance.
+data "aws_ami" "amzn2" {
+  most_recent = true   
+
+  filter {
+    name   = "name"
+    values = ["amzn2-ami-kernel-5.10-hvm-*"]
+    
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+  owners = ["137112412989"] 
+}
+
+resource "aws_instance" "web" {
+  ami           = data.aws_ami.amzn2.id
+  instance_type = "t2.micro"      # Instances type t2.micro.
+  count         = length(var.availability_zones) # EC2 instances created in each AZ.
+  # all_availability_zones = true
+  subnet_id     = aws_subnet.my_subnet[count.index].id   # Added from subnets.tf file
+  vpc_security_group_ids = [aws_security_group.allow_tls.id]
+  associate_public_ip_address = true 
+  key_name = aws_key_pair.linux.key_name  # Add Bastion key to the Instances.
+  user_data = file("httpd.sh") # Automatically install Apache web server and create a simple webpage that returns "Hello, World!" when visited.
+  user_data_replace_on_change = true
+  
+
+  tags = {
+    Name = "web-${count.index + 1}"  # The Instances names are: web-1, web-2, web-2.
+  }
+}
+
+output ec2 {
+  value = aws_instance.web[*].public_ip     # print public_ips all instances
+}
+
+ 
+
+
+
+
+
+
