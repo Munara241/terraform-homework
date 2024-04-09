@@ -19,7 +19,7 @@ resource "aws_s3_bucket" "example" {
   bucket_prefix = "kaizen-"
 }
 
-# Create manually two more buckets ( erbol-a, emir-a ) and import them to terraform code
+# Create manually two more buckets ( erbol-bucket, emir-bucket) and import them to terraform code
 resource "aws_s3_bucket" "family" {
   bucket = "erbol-bucket"
 }
