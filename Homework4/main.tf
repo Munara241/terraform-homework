@@ -11,7 +11,6 @@
 # Count
 
 # Create tfvars file for all 4 regions and test deploying in all 4 regions. Destroy everything after creation.
-
 # In a README.md file provide documentation how to use tfvars file.
 
 provider "aws" {
@@ -37,18 +36,27 @@ variable "type" {
 
 variable "key" {
   type        = string
+  default = "Bastion-key"
   description = "The name for the key pair"
 }
 
 variable "count_vm" {
-  type        = string
-  default     = ""
+  type        = number
+  default     = 1
   description = "count instances"
 }
 
 variable "availability_zones" {
-  default = ["us-west-2a", "us-west-2b", "us-west-2c",]
+  type = string
+  default = ""
+  description = "provide availibility zones"
 }
+variable ports {
+  type        = list
+  default     = [22, 80, 443]
+  description = "description"
+}
+
 
 resource "aws_instance" "vms" {
   ami                    = var.ami_id
@@ -58,7 +66,4 @@ resource "aws_instance" "vms" {
   count                  = var.count_vm
   availability_zone      = var.availability_zones
 
-  tags = {
-    Name = "vms"
-  }
 }
