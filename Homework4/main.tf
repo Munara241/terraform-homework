@@ -52,7 +52,7 @@ variable "availability_zones" {
   description = "provide availibility zones"
 }
 variable ports {
-  type        = list
+  type        = list(number)
   default     = [22, 80, 443]
   description = "description"
 }
