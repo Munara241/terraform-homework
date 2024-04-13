@@ -2,6 +2,10 @@
 
 region = "us-west-2"
 
+rt1 = "public-rt"
+rt2 = "private-rt"
+ig = "homework5_igw"
+
 vpc_dns = [
   { vpc_cidr = "192.168.0.0/16", vpc_name = "kaizen", dns_sup = true, dns_host = true
   }

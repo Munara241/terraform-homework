@@ -78,7 +78,7 @@ resource "aws_internet_gateway" "homework5" {
   vpc_id = aws_vpc.kaizen.id
 
   tags = {
-    Name = "homework5_igw"
+    Name = var.ig
   }
 }
 
@@ -92,7 +92,7 @@ resource "aws_route_table" "public" {
   }
 
   tags = {
-    Name = "public-rt"
+    Name = var.rt1
   }
 }
 
@@ -117,7 +117,7 @@ resource "aws_route_table" "private" {
   }
 
   tags = {
-    Name = "private-rt"
+    Name = var.rt2
   }
 }
 

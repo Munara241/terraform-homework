@@ -3,6 +3,18 @@ variable "region" {
   description = "provide region"
 }
 
+variable "rt1" {
+  type        = string
+}
+
+variable "rt2" {
+  type        = string
+}
+
+variable "ig" {
+  type        = string
+}
+
 variable "subnet_cidr" {
   type = list(object({
     cidr        = string
