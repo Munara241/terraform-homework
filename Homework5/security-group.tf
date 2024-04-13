@@ -2,21 +2,21 @@
 resource "aws_security_group" "allow_tls" {
   name        = "allow_tls"
   description = "Allow TLS inbound traffic"
-  vpc_id     = aws_vpc.kaizen.id
+  vpc_id      = aws_vpc.kaizen.id
 
- ingress {  # inbound rules incoming traffic
-    description      = "provide port 22"
-    from_port        = var.ports[0]
-    to_port          = var.ports[0]
-    protocol         = "tcp"
-    cidr_blocks      = ["0.0.0.0/0"]
+  ingress { # inbound rules incoming traffic
+    description = "provide port 22"
+    from_port   = var.ports[0]
+    to_port     = var.ports[0]
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
-  ingress {  # inbound rules incoming traffic
-    description      = "provide port 80"
-    from_port        = var.ports[1]
-    to_port          = var.ports[1]
-    protocol         = "tcp"
-    cidr_blocks      = ["0.0.0.0/0"]
+  ingress { # inbound rules incoming traffic
+    description = "provide port 80"
+    from_port   = var.ports[1]
+    to_port     = var.ports[1]
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {

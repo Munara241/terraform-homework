@@ -6,7 +6,7 @@
 # Security group with port 22 and 80 opened
 # Deploy 2 EC2 Instances in VPC kaizen: 1st with latest Ubuntu image and named Ubuntu, 2nd with latest Amazon AMI and named Amazon, and install Apache on both instances.
 
- 
+
 # Use variables for:
 
 # region
@@ -23,19 +23,20 @@ provider "aws" {
 }
 
 resource "aws_vpc" "kaizen" {
-  cidr_block = var.vpc_dns[0].vpc
-  enable_dns_support = var.vpc_dns[1].dns_sup
-  enable_dns_hostnames = var.vpc_dns[2].dns_host
+  cidr_block           = var.vpc_dns[0].vpc_cidr
+  enable_dns_support   = var.vpc_dns[0].dns_sup
+  enable_dns_hostnames = var.vpc_dns[0].dns_host
+
   tags = {
     Name = var.vpc_dns[0].vpc_name
   }
 }
 
 resource "aws_subnet" "public1" {
-  vpc_id     = aws_vpc.kaizen.id
-  cidr_block = var.subnet_cidr[0].cidr
-  map_public_ip_on_launch = true  # enable the public_ip
-  availability_zone = "${var.region}a"  # == "us-west-2a"
+  vpc_id                  = aws_vpc.kaizen.id
+  cidr_block              = var.subnet_cidr[0].cidr
+  map_public_ip_on_launch = true             # enable the public_ip
+  availability_zone       = "${var.region}a" # == "us-west-2a"
 
   tags = {
     Name = var.subnet_cidr[0].subnet_name
@@ -43,10 +44,10 @@ resource "aws_subnet" "public1" {
 }
 
 resource "aws_subnet" "public2" {
-  vpc_id     = aws_vpc.kaizen.id
-  cidr_block = var.subnet_cidr[1].cidr
+  vpc_id                  = aws_vpc.kaizen.id
+  cidr_block              = var.subnet_cidr[1].cidr
   map_public_ip_on_launch = true
-  availability_zone = "${var.region}b" # == "us-west-2b"
+  availability_zone       = "${var.region}b" # == "us-west-2b"
 
   tags = {
     Name = var.subnet_cidr[1].subnet_name
@@ -54,8 +55,8 @@ resource "aws_subnet" "public2" {
 }
 
 resource "aws_subnet" "private1" {
-  vpc_id     = aws_vpc.kaizen.id
-  cidr_block = var.subnet_cidr[2].cidr
+  vpc_id            = aws_vpc.kaizen.id
+  cidr_block        = var.subnet_cidr[2].cidr
   availability_zone = "${var.region}c" # == "us-west-2c"
 
   tags = {
@@ -63,9 +64,9 @@ resource "aws_subnet" "private1" {
   }
 }
 
-  resource "aws_subnet" "private2" {
-  vpc_id     = aws_vpc.kaizen.id
-  cidr_block = var.subnet_cidr[3].cidr
+resource "aws_subnet" "private2" {
+  vpc_id            = aws_vpc.kaizen.id
+  cidr_block        = var.subnet_cidr[3].cidr
   availability_zone = "${var.region}d" # == "us-west-2d"
 
   tags = {
@@ -120,12 +121,12 @@ resource "aws_route_table" "private" {
   }
 }
 
-resource "aws_route_table_association" "a1" {
+resource "aws_route_table_association" "c" {
   subnet_id      = aws_subnet.private1.id
   route_table_id = aws_route_table.private.id
 }
 
-resource "aws_route_table_association" "b1" {
+resource "aws_route_table_association" "d" {
   subnet_id      = aws_subnet.private2.id
   route_table_id = aws_route_table.private.id
 }

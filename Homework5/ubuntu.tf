@@ -16,11 +16,12 @@ data "aws_ami" "ubuntu" {
 }
 
 resource "aws_instance" "web1" {
-  ami           = data.aws_ami.ubuntu.id
-  instance_type = var.instance[0].ec2_type
+  ami                    = data.aws_ami.ubuntu.id
+  instance_type          = var.instance[0].ec2_type
+  subnet_id              = aws_subnet.public1.id
   vpc_security_group_ids = [aws_security_group.allow_tls.id] # we can provide list of sec_groups 
-  user_data = file("apache.sh")
-  
+  user_data              = file("apache.sh")
+
   tags = {
     Name = var.instance[0].ec2_name
   }
