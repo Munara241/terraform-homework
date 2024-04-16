@@ -5,7 +5,7 @@ provider aws {
 # backend file
 terraform {
   backend "s3" {
-    bucket = "munaras-homework6"
+    bucket = "munaras-homework"
     key    = "ohio/terraform.tfstate"
     region = "us-east-2"
     dynamodb_table = "state-lock"
@@ -62,7 +62,6 @@ resource "aws_instance" "web1" {
   ami                    = data.aws_ami.ubuntu.id
   instance_type          = var.instance[0].ec2_type
   vpc_security_group_ids = [aws_security_group.allow_tls.id] 
-  map_public_ip_on_launch = true 
   user_data              = file("apache.sh")
   tags = {
     Name = var.instance[0].ec2_name
